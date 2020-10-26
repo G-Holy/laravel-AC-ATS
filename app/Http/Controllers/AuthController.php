@@ -103,6 +103,18 @@ class AuthController extends Controller
         ], 200);
     }
 
+    public function me()
+    {
+        return response()->json([
+            "success" => true,
+            "data" => $this->guard()->user()
+        ], 200);
+    }
+
+    public function refresh()
+    {
+    }
+
     /**
      * Get the guard to be used during authentication.
      *
