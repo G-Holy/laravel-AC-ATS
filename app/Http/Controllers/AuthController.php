@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
@@ -100,14 +99,6 @@ class AuthController extends Controller
         return response()->json([
             "success" => true,
             "data" => $user
-        ], 200);
-    }
-
-    public function me()
-    {
-        return response()->json([
-            "success" => true,
-            "data" => $this->guard()->user()
         ], 200);
     }
 

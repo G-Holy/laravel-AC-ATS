@@ -68,6 +68,6 @@ class User extends Authenticatable implements JWTSubject
      */
     public function missions()
     {
-        return $this->belongsToMany('App\Models\Mission');
+        return $this->belongsToMany('App\Models\Mission')->withPivot("ac_write", "ac_delete");
     }
 }
