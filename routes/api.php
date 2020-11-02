@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccessRight\MissionUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -48,6 +49,13 @@ Route::group([
     Route::get("me", [UserController::class, "me"]);
 });
 
+Route::group([
+    "middleware" => ["api", "json.response"],
+    "namespace" => "App\Http\Controllers",
+    // "prefix" => 
+], function ($router) {
+    Route::post('/mission/{mission}/user/{user}/attach', [MissionUserController::class, "attachUser"]);
+});
 
 Route::group([
     "middleware" => ["api", "json.response"],

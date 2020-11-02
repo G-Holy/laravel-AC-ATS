@@ -24,8 +24,9 @@ class CreateMissionUserTable extends Migration
                 ->constrained()
                 ->onDelete('cascade');
 
-            $table->boolean("ac_write")->default(false);
-            $table->boolean("ac_delete")->default(false);
+            $table->boolean("ac_write")->default(true);
+            $table->boolean("ac_delete")->default(true);
+            $table->boolean("ac_share")->default(true);
 
             $table->primary(["mission_id", "user_id"]);
             $table->timestamps();

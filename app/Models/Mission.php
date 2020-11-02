@@ -15,6 +15,6 @@ class Mission extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\Models\User')->withPivot("ac_write", "ac_delete");
+        return $this->belongsToMany('App\Models\User')->withPivot("ac_write", "ac_delete", "ac_share");
     }
 }

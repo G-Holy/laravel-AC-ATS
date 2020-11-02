@@ -17,39 +17,6 @@ class MissionPolicy
     //     return $user->role === "admin";
     // }
 
-    /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
-     */
-    public function viewAny(User $user)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Mission  $mission
-     * @return mixed
-     */
-    public function view(User $user, Mission $mission)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can create models.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
-     */
-    public function create(User $user)
-    {
-        //
-    }
 
     /**
      * Determine whether the user can update the model.
@@ -80,32 +47,23 @@ class MissionPolicy
      */
     public function delete(User $user, Mission $mission)
     {
-        $permission = $user->missions()->where('mission_id', $mission->id)->first();
+        $relation = DB::table('mission_user')->where("mission_id", $mission->id)->where("user_id", $user->id)->first();
 
-        return $user->id == $mission->user_id || $permission->ac_delete == true;
+        return  $user->id == $mission->user_id || $relation != NULL && $relation->ac_delete == true;
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Mission  $mission
      * @return mixed
      */
-    public function restore(User $user, Mission $mission)
+    public function share(User $user, Mission $mission)
     {
-        //
-    }
+        dd("STOP HERE ADVENTURER");
+        $relation = DB::table('mission_user')->where("mission_id", $mission->id)->where("user_id", $user->id)->first();
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Mission  $mission
-     * @return mixed
-     */
-    public function forceDelete(User $user, Mission $mission)
-    {
-        //
+        return  $user->id == $mission->user_id || $relation != NULL && $relation->ac_share == true;
     }
 }
