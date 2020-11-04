@@ -45,12 +45,12 @@ class MissionController extends Controller
 
     public function edit(Request $request, Mission $mission)
     {
-        if (!Gate::allows("edit", $mission)) {
-            return response()->json([
-                "success" => false,
-                "error" => "You don't have the right to edit this mission"
-            ], 401);
-        }
+        // if (!Gate::allows("edit", $mission)) {
+        //     return response()->json([
+        //         "success" => false,
+        //         "error" => "You don't have the right to edit this mission"
+        //     ], 401);
+        // }
 
         $validator  = Validator::make($request->all(), [
             "title" => "required|max:200|min:3",

@@ -18,7 +18,7 @@ use App\Http\Controllers\UserController;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
+// $router->middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
 
@@ -31,10 +31,10 @@ Route::group([
     "namespace" => "App\Http\Controllers",
     "prefix" => "auth"
 ], function ($router) {
-    Route::post("register", [AuthController::class, "register"]);
-    Route::post("login", [AuthController::class, "login"]);
-    Route::post("logout", [AuthController::class, "logout"]);
-    // Route::post("refresh", [AuthController::class, "refresh"]);
+    $router->post("register", [AuthController::class, "register"]);
+    $router->post("login", [AuthController::class, "login"]);
+    $router->post("logout", [AuthController::class, "logout"]);
+    // $router->post("refresh", [AuthController::class, "refresh"]);
 });
 
 
@@ -46,7 +46,7 @@ Route::group([
     "namespace" => "App\Http\Controllers",
     "prefix" => "user"
 ], function ($router) {
-    Route::get("me", [UserController::class, "me"]);
+    $router->get("me", [UserController::class, "me"]);
 });
 
 Route::group([
@@ -54,7 +54,7 @@ Route::group([
     "namespace" => "App\Http\Controllers",
     // "prefix" => 
 ], function ($router) {
-    Route::post('/mission/{mission}/user/{user}/attach', [MissionUserController::class, "attachUser"]);
+    $router->post('mission/{mission}/user/{user}/attach', [MissionUserController::class, "attachUser"]);
 });
 
 Route::group([
@@ -62,7 +62,7 @@ Route::group([
     "namespace" => "App\Http\Controllers",
     // "prefix" => "mission"
 ], function ($router) {
-    Route::post("mission", [MissionController::class, "create"]);
-    Route::post("mission/{mission}", [MissionController::class, "edit"]);
-    Route::get("mission/getReadable", [MissionController::class, "getReadable"]);
+    $router->post("mission", [MissionController::class, "create"]);
+    $router->post("mission/{mission}", [MissionController::class, "edit"])->middleware("can:share,mission");
+    $router->get("mission/getReadable", [MissionController::class, "getReadable"]);
 });

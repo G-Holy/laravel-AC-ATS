@@ -2,30 +2,49 @@
 
 namespace App\Http\Controllers\AccessRight;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Mission;
 use App\Models\User;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class MissionUserController extends Controller
 {
-    // Faire toutes les TO ONE + une TO MANY modulable ([users][right])
-
-
-    public function attachUser(Mission $mission, User $user)
+    public function __construct()
     {
-        // ICI LA POLICY NE SEMBLE PAS S'APPELER
+        $this->middleware("auth:api");
+    }
 
-        //Gate::allows("share", $mission);
-        // if (!Gate::allows("share", $mission)) {
-        //     return response()->json([
-        //         "success" => false,
-        //         "error" => "Unauthorized"
-        //     ], 401);
-        // }
+    public function attachUser(Request $request, Mission $mission, User $user)
+    {
+        if (!Auth::user()->can("share", $mission)) {
+            return response()->json([
+                "success" => false,
+                "error" => "Unauthorized"
+            ], 401);
+        }
 
         $sync = $mission->users()->syncWithoutDetaching([$user->id]);
+
+        return response()->json([
+            "succress" => true,
+            "data" => $sync
+        ]);
+    }
+
+    public function detachUser(Mission $mission, User $user)
+    {
+
+        if (!Auth::user()->can("share", $mission)) {
+            return response()->json([
+                "success" => false,
+                "error" => "Unauthorized"
+            ], 401);
+        }
+
+        $sync = $mission->users()->detach($user->id);
 
         return response()->json([
             "succress" => true,

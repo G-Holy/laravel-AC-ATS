@@ -7,6 +7,11 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
+// OPTIMISATION 
+// ->pivot
+// créer un model juste pour la table pivot
+// conf la relation avec
+
 class MissionPolicy
 {
     use HandlesAuthorization;
@@ -27,15 +32,14 @@ class MissionPolicy
      */
     public function edit(User $user, Mission $mission)
     {
-        // OPTIMISATION 
-        // ->pivot
-        // créer un model juste pour la table pivot
-        // conf la relation avec
+        if ($user->id == $mission->user_id)
+            return true;
 
-        $relation = DB::table('mission_user')->where("mission_id", $mission->id)->where("user_id", $user->id)->first();
-
-
-        return  $user->id == $mission->user_id || $relation != NULL && $relation->ac_write == true;
+        $relation = DB::table('mission_user')
+            ->where("mission_id", $mission->id)
+            ->where("user_id", $user->id)
+            ->first();
+        return $relation != NULL && $relation->ac_write == true;
     }
 
     /**
@@ -47,13 +51,18 @@ class MissionPolicy
      */
     public function delete(User $user, Mission $mission)
     {
-        $relation = DB::table('mission_user')->where("mission_id", $mission->id)->where("user_id", $user->id)->first();
+        if ($user->id == $mission->user_id)
+            return true;
 
-        return  $user->id == $mission->user_id || $relation != NULL && $relation->ac_delete == true;
+        $relation = DB::table('mission_user')
+            ->where("mission_id", $mission->id)
+            ->where("user_id", $user->id)
+            ->first();
+        return $relation != NULL && $relation->ac_delete == true;
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Determine whether the user can share the model.
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Mission  $mission
@@ -61,9 +70,14 @@ class MissionPolicy
      */
     public function share(User $user, Mission $mission)
     {
-        dd("STOP HERE ADVENTURER");
-        $relation = DB::table('mission_user')->where("mission_id", $mission->id)->where("user_id", $user->id)->first();
+        if ($user->id == $mission->user_id)
+            return true;
 
-        return  $user->id == $mission->user_id || $relation != NULL && $relation->ac_share == true;
+        $relation = DB::table('mission_user')
+            ->where("mission_id", $mission->id)
+            ->where("user_id", $user->id)
+            ->first();
+
+        return $relation != NULL && $relation->ac_share == true;
     }
 }
