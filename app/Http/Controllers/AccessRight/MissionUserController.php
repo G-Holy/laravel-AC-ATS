@@ -44,7 +44,20 @@ class MissionUserController extends Controller
             ], 401);
         }
 
+        $linkExist = DB::table('mission_user')
+            ->where("mission_id", $mission->id)
+            ->where("user_id", $user->id)
+            ->count();
+
+        if (!$linkExist) {
+            return response()->json([
+                "success" => false,
+                "error" => "Failed to detach"
+            ], 400);
+        }
+
         $sync = $mission->users()->detach($user->id);
+
 
         return response()->json([
             "succress" => true,

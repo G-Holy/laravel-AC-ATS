@@ -55,6 +55,7 @@ Route::group([
     // "prefix" => 
 ], function ($router) {
     $router->post('mission/{mission}/user/{user}/attach', [MissionUserController::class, "attachUser"]);
+    $router->post('mission/{mission}/user/{user}/detach', [MissionUserController::class, "detachUser"]);
 });
 
 Route::group([
