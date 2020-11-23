@@ -22,7 +22,8 @@ class MissionFactory extends Factory
     public function definition()
     {
         return [
-            //
+            "title" => $this->faker->realText(30),
+            "description" => $this->faker->realText()
         ];
     }
 }

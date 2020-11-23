@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Seeders;
-
 use Illuminate\Database\Seeder;
 
-class MissionSeeder extends Seeder
+use App\Models\Mission;
+
+class TagSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +13,5 @@ class MissionSeeder extends Seeder
      */
     public function run()
     {
-        //
     }
 }

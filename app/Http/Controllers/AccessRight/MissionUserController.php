@@ -8,6 +8,7 @@ use App\Models\Mission;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 
 class MissionUserController extends Controller
@@ -62,6 +63,79 @@ class MissionUserController extends Controller
         return response()->json([
             "succress" => true,
             "data" => $sync
+        ]);
+    }
+
+    public function attachManyUser(Request $request, Mission $mission)
+    {
+
+        $validator  = Validator::make($request->all(), [
+            "users" => "required",
+        ]);
+
+        if ($validator->fails())
+            return response()->json(['error' => $validator->errors(), "success" => false,], 401);
+
+        if (!Auth::user()->can("share", $mission)) {
+            return response()->json([
+                "success" => false,
+                "error" => "Unauthorized"
+            ], 401);
+        }
+
+        $sync = $mission->users()->syncWithoutDetaching($request->users);
+
+        return response()->json([
+            "succress" => true,
+            "data" => $sync
+        ]);
+    }
+
+    public function detachManyUser(Request $request, Mission $mission)
+    {
+
+        $validator  = Validator::make($request->all(), [
+            "users" => "required",
+        ]);
+
+        if ($validator->fails())
+            return response()->json(['error' => $validator->errors(), "success" => false,], 401);
+
+        if (!Auth::user()->can("share", $mission)) {
+            return response()->json([
+                "success" => false,
+                "error" => "Unauthorized"
+            ], 401);
+        }
+
+        $sync = $mission->users()->detach($request->users);
+
+        return response()->json([
+            "succress" => true,
+            "data" => $sync
+        ]);
+    }
+
+    public function giveWriteToOne(Mission $mission, User $user)
+    {
+
+        if (!Auth::user()->can("share", $mission)) {
+            return response()->json([
+                "success" => false,
+                "error" => "Unauthorized"
+            ], 401);
+        }
+
+        $link = DB::table('mission_user')
+            ->where("mission_id", $mission->id)
+            ->where("user_id", $user->id)
+            ->first();
+
+        $link->update(["ac_write" => true]);
+
+        return response()->json([
+            "succress" => true,
+            "data" => $link
         ]);
     }
 

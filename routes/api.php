@@ -54,8 +54,17 @@ Route::group([
     "namespace" => "App\Http\Controllers",
     // "prefix" => 
 ], function ($router) {
+    // Access control: READ
     $router->post('mission/{mission}/user/{user}/attach', [MissionUserController::class, "attachUser"]);
     $router->post('mission/{mission}/user/{user}/detach', [MissionUserController::class, "detachUser"]);
+    $router->post('mission/{mission}/attach', [MissionUserController::class, "attachManyUser"]);
+    $router->post('mission/{mission}/detach', [MissionUserController::class, "detachManyUser"]);
+
+    // Access control: WRITE
+    $router->post('mission/{mission}/user/{user}/write/give', [MissionUserController::class, "giveWrit"]);
+    // $router->post('mission/{mission}/user/{user}/detach', [MissionUserController::class, "detachUser"]);
+    // $router->post('mission/{mission}/attach', [MissionUserController::class, "attachManyUser"]);
+    // $router->post('mission/{mission}/detach', [MissionUserController::class, "detachManyUser"]);
 });
 
 Route::group([
